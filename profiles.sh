@@ -2,6 +2,7 @@
 APP_DIR="$HOME/.codeprofiles/"
 PROFILES_DIR="$APP_DIR/profiles/"
 
+
 BRED='\033[1;91m'
 LRED='\033[1;31m'
 BGREEN="\033[1;92m"
@@ -37,6 +38,19 @@ render_app(){
     do
         listen_for_keys
     done
+}
+check_dirs(){
+    if [ ! -d "$APP_DIR" ];
+    then 
+        sudo mkdir $APP_DIR
+    fi
+    sudo chmod 777 $APP_DIR
+
+    if [ ! -d "$PROFILES_DIR" ];
+    then 
+        sudo mkdir $PROFILES_DIR
+    fi
+    sudo chmod 777 $PROFILES_DIR
 }
 render_profile_list(){
     profiles_list
@@ -215,5 +229,5 @@ check_if_profile_name_is_valid(){
 
 }
 
-
+check_dirs
 render_app

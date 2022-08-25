@@ -6,17 +6,6 @@ INSTALL_DIR="/opt/codeprofiles"
 BINARY_INSTALL_DIR="/usr/local/bin"
 CURRENT_DIR="$(pwd)"
 
-if [ ! -d "$APP_DATA_DIR" ];
-then 
-    sudo mkdir $APP_DATA_DIR
-fi
-sudo chmod 777 $APP_DATA_DIR
-
-if [ ! -d "$PROFILES_DIR" ];
-then 
-    sudo mkdir $PROFILES_DIR
-fi
-sudo chmod 777 $PROFILES_DIR
 
 if [ -d "$INSTALL_DIR" ];
 then 
