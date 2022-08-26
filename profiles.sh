@@ -81,8 +81,9 @@ read_profiles(){
 }
 render_options(){
     printf "${BWHITE}Choose another option:\n${NC}"
-    printf "    ${BGREEN}[N]${NC} Create a new profile.\n"
-    printf "    ${BGREEN}[D]${NC} Delete a profile.\n"
+    printf "    ${BGREEN}[N]${NC} Create a new profile\n"
+    printf "    ${BGREEN}[D]${NC} Delete a profile\n"
+    printf "    ${BGREEN}[Q]${NC} Quit\n"
 }
 listen_for_keys(){
     read -rsn1 input
@@ -92,6 +93,17 @@ listen_for_keys(){
         launch_code $USER_CHOSEN_PROFILE
     elif [[ $input = "n" ]] || [[ $input = "N" ]];then
         handle_new_profile_name
+    elif [[ $input = "q" ]] || [[ $input = "Q" ]];then
+        printf "${BYELLOW}\nAre you sure you want to exit?\n${NC}"
+        printf "[${BWHITE}Y${NC} to confirm ${BWHITE}N${NC} to cancel]\n"
+        while :;do
+            read -rsn1 conf
+            if [[ $conf = "y" ]] || [[ $conf = "Y" ]]; then
+                exit
+            elif [[ $conf = "n" ]] || [[ $conf = "N" ]]; then
+                render_app
+            fi
+        done
     elif [[ $input = "d" ]] || [[ $input = "D" ]];then
         if [[ ${#PROFILES_LIST[@]} == "0" ]];then
             render_app "${LRED}Error:${BRED} You don't have any profiles to delete.${NC}"
@@ -199,9 +211,8 @@ handle_delete_profile(){
         handle_delete_profile "${LRED}Error:${BRED} profile does not exist." "Make sure to enter the correct profile name or number from the list above.${NC}"
     fi
 
-    printf "${BYELLOW}\nAre you sure you want to delete ${BWHITE}'$DELETE_PROFILE_NAME'${BYELLOW} ?\n${NC}"
-    printf "  you will lose all extentions and user data.\n"
-    printf "  this action is permanant and deleted profiles cannot be restored.\n"
+    printf "${BYELLOW}\nAre you sure you want to delete ${BWHITE}'$DELETE_PROFILE_NAME'${BYELLOW} permanently? \n${NC}"
+    printf "${BRED}All the extentions and user data of this profile will be forever lost.\n${NC}"
     printf "[Press ${BWHITE}Y${NC} to confirm or ${BWHITE}N${NC} to cancel]\n"
     while :;do
         read -rsn1 conf
