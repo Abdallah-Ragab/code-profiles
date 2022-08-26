@@ -16,4 +16,7 @@ However you can compile your own binary using the script included in the "script
 
 ## Usage
 
-Simply run `codeprofiles`
+Simply run `codeprofiles [profile]`
+
+### options
+Optionally you can choose a profile from the terminal to launch immediately by running `codeprofiles profile-name` 

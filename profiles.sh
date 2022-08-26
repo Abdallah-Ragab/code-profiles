@@ -34,6 +34,11 @@ render_app(){
     render_profile_list
     render_options
 
+    if [ ! -z ${LAUNCH_PROFILE+x} ];then
+        launch_code $LAUNCH_PROFILE
+        unset LAUNCH_PROFILE
+    fi
+
     while :;
     do
         listen_for_keys
@@ -84,7 +89,6 @@ listen_for_keys(){
 
     if $(key_exists_in_profiles $input);then
         USER_CHOSEN_PROFILE=${PROFILES_LIST[$input]}
-        printf "\n${BYELLOW}launching${BWHITE} $USER_CHOSEN_PROFILE ${BYELLOW}... ${NC}"
         launch_code $USER_CHOSEN_PROFILE
     elif [[ $input = "n" ]] || [[ $input = "N" ]];then
         handle_new_profile_name
@@ -110,6 +114,7 @@ key_exists_in_profiles(){
 launch_code(){
     local PROFILE=$1
     local PROFILE_DIR="$PROFILES_DIR/$PROFILE"
+    printf "\n${BYELLOW}launching${BWHITE} $PROFILE ${BYELLOW}... ${NC}"
     code --user-data-dir $PROFILE_DIR/data --extensions-dir $PROFILE_DIR/extensions
     if [[ $? = "0" ]];then
         printf "${BGREEN}Done${NC}"
@@ -230,4 +235,16 @@ check_if_profile_name_is_valid(){
 }
 
 check_dirs
-render_app
+
+if [ ! -z ${1+x} ];then
+    profiles_list
+    if $(check_if_profile_exists $1);then
+        LAUNCH_PROFILE=$1
+        render_app
+    else 
+        render_app "${LRED}Error:${BRED} profile ${BWHITE}'$1'${BRED} was not found.${NC}"
+    fi
+else
+    render_app
+fi
+
