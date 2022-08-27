@@ -19,7 +19,7 @@ sudo chmod +x "$INSTALL_DIR/profiles.sh"
 sudo cp -R "$CURRENT_DIR/visuals/" "$INSTALL_DIR/"
 
 sudo chmod -R 777 "$INSTALL_DIR"
-sudo chmod -R a=rw "$INSTALL_DIR/visuals"
+# sudo chmod -R a=rw "$INSTALL_DIR/visuals"
 
 sudo cat > /usr/share/applications/codeprofiles.desktop << EOF
 [Desktop Entry]

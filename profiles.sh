@@ -2,6 +2,7 @@
 APP_DIR="$HOME/.codeprofiles/"
 PROFILES_DIR="$APP_DIR/profiles/"
 
+SILENT_LAUNCH="false"
 
 BRED='\033[1;91m'
 LRED='\033[1;31m'
@@ -20,8 +21,30 @@ MAGENTA="\033[1;95m"
 LMAGENTA="\033[1;35m"
 NC='\033[0m'
 
+
+GUIDE="
+DESCRIPTON:
+    The Code Profiles | Multi-profile manager for VS Code.
+    Simple tool to create and manage multiple profiles of vs code.
+
+USAGE:
+    $0 [-p profile] [-s] [-h]
+
+OPTIONS:
+    -s              Run in silent mode.if a profile is specified using the [-p] option the script will run VS Code with the specified profile and exit silently without showing the full interface.
+    -p [profile]    Specify a profile to launch immediately as the script launches.
+    -h              Get instructions.
+"
+
 render_app(){
+
+    if $SILENT_LAUNCH && [ ! -z ${LAUNCH_PROFILE+x} ]; then
+        check_for_launch
+        exit
+    fi
+
     clear
+
     printf "${MAGENTA}> Welcome${BWHITE} $USER ${MAGENTA}:)\n\n${NC}"
     for err in "$@" ; do
         printf "$err \n"
@@ -34,15 +57,18 @@ render_app(){
     render_profile_list
     render_options
 
-    if [ ! -z ${LAUNCH_PROFILE+x} ];then
-        launch_code $LAUNCH_PROFILE
-        unset LAUNCH_PROFILE
-    fi
+    check_for_launch
 
     while :;
     do
         listen_for_keys
     done
+}
+check_for_launch(){
+    if [ ! -z ${LAUNCH_PROFILE+x} ];then
+        launch_code $LAUNCH_PROFILE
+        unset LAUNCH_PROFILE
+    fi
 }
 check_dirs(){
     if [ ! -d "$APP_DIR" ];
@@ -247,15 +273,35 @@ check_if_profile_name_is_valid(){
 
 check_dirs
 
-if [ ! -z ${1+x} ];then
-    profiles_list
-    if $(check_if_profile_exists $1);then
-        LAUNCH_PROFILE=$1
-        render_app
-    else 
-        render_app "${LRED}Error:${BRED} profile ${BWHITE}'$1'${BRED} was not found.${NC}"
-    fi
-else
-    render_app
+if [ $1 = "--help" ];then
+    echo "$GUIDE"
+    exit
 fi
+
+while getopts "shp:" arg; do
+case $arg in
+    h) 
+        echo "$GUIDE"
+        exit
+    ;;
+    s)
+        SILENT_LAUNCH="true"
+    ;;
+    p) 
+        profiles_list
+        if $(check_if_profile_exists $OPTARG);then
+            LAUNCH_PROFILE=$OPTARG
+            render_app
+        else 
+            render_app "${LRED}Error:${BRED} profile ${BWHITE}'$OPTARG'${BRED} was not found.${NC}"
+        fi
+        
+    ;;
+esac
+done
+
+
+
+render_app
+
 

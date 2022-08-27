@@ -1,5 +1,5 @@
-# The Code Profiles - Multi-profile manager for VS Code.
-Simple tool to create and manage multiple profiles of vs code with different settings, themes and extensions. Essential for ant developer that uses multiple languages with different setup for each one.
+# The Code Profiles | Multi-profile manager for VS Code.
+Simple tool to create and manage multiple profiles of vs code with different settings, themes and extensions. Essential for any developer that uses multiple languages with different setup for each one.
 
 ## Installation
 
@@ -16,7 +16,12 @@ However you can compile your own binary using the script included in the "script
 
 ## Usage
 
-Simply run `codeprofiles [profile]`
+Simply run the following command:
 
-### options
-Optionally you can choose a profile from the terminal to launch immediately by running `codeprofiles profile-name` 
+    codeprofiles [-p profile] [-s] [-h]
+### Options:
+`-s` | Run in silent mode. if a profile is specified using the `-p` option the script will run VS Code with the specified profile and exit silently without showing the full interface.
+
+`-p [profile]` | Specify a profile to launch immediately as the script launches.
+
+`-h` | Get instructions.
